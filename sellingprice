@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisan Cost Calculator - India</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        input:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        .btn {
+            background: linear-gradient(to right, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            display: none;
+            border-left: 5px solid #3498db;
+        }
+        .result h2 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .cost-breakdown {
+            margin: 20px 0;
+        }
+        .cost-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .profit-price {
+            font-size: 26px;
+            font-weight: bold;
+            color: #27ae60;
+            text-align: center;
+            margin: 25px 0;
+            padding: 20px;
+            background-color: #e8f8f0;
+            border-radius: 10px;
+            border: 2px dashed #27ae60;
+        }
+        .note {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fef9e7;
+            border-radius: 8px;
+            border-left: 4px solid #f1c40f;
+        }
+        .rupee-symbol {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+        }
+        .input-with-icon {
+            position: relative;
+        }
+        .input-with-icon:before {
+            content: '₹';
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #7f8c8d;
+        }
+        .input-with-icon input {
+            padding-left: 30px;
+        }
+        .percentage-input {
+            position: relative;
+        }
+        .percentage-input:after {
+            content: '%';
+            position: absolute;
+            right: 15px;
+            top: 12px;
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+        .percentage-input input {
+            padding-right: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+        }
+        .card-title i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        .summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .summary-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+        }
+        .summary-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .summary-label {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .summary {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Artisan Cost Calculator</h1>
+        <p class="subtitle">Calculate the minimum profitable selling price for your handmade products</p>
+        
+        <div class="card">
+            <div class="card-title">
+                <i>📊</i> Project Details
+            </div>
+            <form id="costCalculator">
+                <div class="form-group">
+                    <label for="hours">Hours Spent:</label>
+                    <input type="number" id="hours" step="0.25" min="0" placeholder="Enter hours worked" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="materialCost">Raw Material Cost:</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="materialCost" step="0.01" min="0" placeholder="Enter material cost" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hourlyWage">Hourly Wage (₹):</label>
+                    <div class="input-with-icon">
+                        <input type="number" id="hourlyWage" step="1" min="0" value="100">
+                    </div>
+                    <small>Default wage is set to ₹100 per hour</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="profitMargin">Desired Profit Margin:</label>
+                    <div class="percentage-input">
+                        <input type="number" id="profitMargin" step="1" min="0" value="20">
+                    </div>
+                    <small>Default profit margin is 20%</small>
+                </div>
+                
+                <button type="button" class="btn" id="calculateBtn">Calculate Selling Price</button>
+            </form>
+        </div>
+        
+        <div class="result" id="result">
+            <h2>Cost Breakdown</h2>
+            
+            <div class="cost-breakdown">
+                <div class="cost-item">
+                    <span>Labor Cost:</span>
+                    <span id="laborCost"><span class="rupee-symbol">₹</span>0.00</span>
+                </div>
+                <div class="cost-item">
+                    <span>Material Cost:</span>
+                    <span id="materialCostDisplay"><span class="rupee-symbol">₹</span>0.00</span>
+                </div>
+                <div class="cost-item">
+                    <span>Total Cost:</span>
+                    <span id="totalCost"><span class="rupee-symbol">₹</span>0.00</span>
+                </div>
+            </div>
+            
+            <div class="profit-price">
+                Minimum Selling Price: <span id="sellingPrice"><span class="rupee-symbol">₹</span>0.00</span>
+            </div>
+            
+            <div class="summary">
+                <div class="summary-item">
+                    <div class="summary-value" id="hourlyRateDisplay"><span class="rupee-symbol">₹</span>100</div>
+                    <div class="summary-label">Hourly Rate</div>
+                </div>
+                <div class="summary-item">
+                    <div class="summary-value" id="profitPercentDisplay">20%</div>
+                    <div class="summary-label">Profit Margin</div>
+                </div>
+            </div>
+            
+            <div class="note">
+                <p><strong>Note:</strong> This price ensures you cover all costs and make your desired profit. Consider market factors, uniqueness of your product, and customer demand when setting your final price.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            // Get input values
+            const hours = parseFloat(document.getElementById('hours').value) || 0;
+            const materialCost = parseFloat(document.getElementById('materialCost').value) || 0;
+            const hourlyWage = parseFloat(document.getElementById('hourlyWage').value) || 100;
+            const profitMargin = (parseFloat(document.getElementById('profitMargin').value) || 20) / 100;
+            
+            // Validate inputs
+            if (hours <= 0 || materialCost <= 0) {
+                alert('Please enter valid values for hours and material cost.');
+                return;
+            }
+            
+            // Calculate costs
+            const laborCost = hours * hourlyWage;
+            const totalCost = laborCost + materialCost;
+            const sellingPrice = totalCost * (1 + profitMargin);
+            
+            // Display results
+            document.getElementById('laborCost').innerHTML = '<span class="rupee-symbol">₹</span>' + laborCost.toFixed(2);
+            document.getElementById('materialCostDisplay').innerHTML = '<span class="rupee-symbol">₹</span>' + materialCost.toFixed(2);
+            document.getElementById('totalCost').innerHTML = '<span class="rupee-symbol">₹</span>' + totalCost.toFixed(2);
+            document.getElementById('sellingPrice').innerHTML = '<span class="rupee-symbol">₹</span>' + sellingPrice.toFixed(2);
+            
+            // Update summary
+            document.getElementById('hourlyRateDisplay').innerHTML = '<span class="rupee-symbol">₹</span>' + hourlyWage.toFixed(0);
+            document.getElementById('profitPercentDisplay').textContent = (profitMargin * 100).toFixed(0) + '%';
+            
+            // Show result section
+            document.getElementById('result').style.display = 'block';
+            
+            // Scroll to results
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        });
+        
+        // Add some sample values for demonstration
+        document.getElementById('hours').value = '8';
+        document.getElementById('materialCost').value = '500';
+    </script>
+</body>
+</html>
